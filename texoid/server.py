@@ -82,7 +82,7 @@ class MainHandler(tornado.web.RequestHandler):
                 'error_message': error.message
             }
 
-    def get(self):
+    def post(self):
         self.write(json.dumps(self.handle_request()))
 
 
