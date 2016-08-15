@@ -70,7 +70,7 @@ class MainHandler(tornado.web.RequestHandler):
                 svg_data = dvi_to_svg(filename).strip()
                 png_data = svg_to_png(svg_data).strip().encode('base64')
                 return {
-                    'status': 'ok',
+                    'status': 'success',
                     'data': {
                         'svg': svg_data,
                         'png': png_data
