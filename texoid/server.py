@@ -15,34 +15,24 @@ from tornado.options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
 
-
-def getenv_or_fail(env):
-    try:
-        return os.environ[env]
-    except:
-        raise AssertionError('%s environment variable unspecified' % env)
-
-
 LATEX_PATH = os.environ.get('LATEX_BIN', '/usr/bin/latex')
-DVISVGM_PATH = getenv_or_fail('DVISVGM_BIN')
-DVIPNG_PATH = getenv_or_fail('DVIPNG_BIN')
+DVISVGM_PATH = os.environ.get('DVISVGM_BIN', '/usr/bin/dvisvgm')
+CONVERT_PATH = os.environ.get('CONVERT_BIN', '/usr/bin/convert')
 
-for path in [LATEX_PATH, DVISVGM_PATH, DVIPNG_PATH]:
+for path in [LATEX_PATH, DVISVGM_PATH, CONVERT_PATH]:
     if os.path.exists(path) and os.path.isfile(path):
         continue
     raise AssertionError('necessary file "%s" does not exist or is not a file' % path)
 
 
-def dvi_to_png(filename):
-    comp = subprocess.Popen([DVIPNG_PATH, '-T', 'tight', '-q', '-o', '/dev/stderr', filename], stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    out, err = comp.communicate()
+def svg_to_png(svg):
+    comp = subprocess.Popen([CONVERT_PATH, 'svg:-', 'png:/dev/stdout'], stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    out, err = comp.communicate(svg)
     if comp.returncode:
-        print >> sys.stderr, out
-        raise AssertionError('dvisvgm exited with error code')
-    if 'ERROR' in out:
-        raise AssertionError(out)
-    return err
+        print >> sys.stderr, err
+        raise AssertionError('convert exited with error code')
+    return out
 
 
 def dvi_to_svg(filename):
@@ -62,8 +52,8 @@ def latex_to_dvi(filename):
         [LATEX_PATH, '-halt-on-error', '-output-directory=%s' % os.path.dirname(filename), filename],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = comp.communicate()[0]
-    print out
     if comp.returncode:
+        print >> sys.stderr, out
         raise AssertionError(out)
     return filename.replace('.latex', '.dvi')
 
@@ -78,24 +68,22 @@ class MainHandler(tornado.web.RequestHandler):
 
                 filename = latex_to_dvi(raw.name)
                 svg_data = dvi_to_svg(filename).strip()
-                png_data = dvi_to_png(filename).strip().encode('base64')
+                png_data = svg_to_png(svg_data).strip().encode('base64')
                 return {
                     'status': 'ok',
                     'data': {
                         'svg': svg_data,
                         'png': png_data
-                    }
-                }
+                    }}
         except Exception as error:
             print error.message
             return {
                 'status': 'error',
-                'data': error.message
+                'error_message': error.message
             }
 
     def get(self):
-        out = json.dumps(self.handle_request())
-        self.write(out)
+        self.write(json.dumps(self.handle_request()))
 
 
 def main():
