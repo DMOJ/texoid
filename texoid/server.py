@@ -90,7 +90,7 @@ class MainHandler(tornado.web.RequestHandler):
             print error.message
             return {
                 'status': 'error',
-                'error_message': error.message
+                'data': error.message
             }
 
     def get(self):
