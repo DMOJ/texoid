@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='dmoj',
+    name='texoid',
     version='0.1',
-    packages=['dmoj'],
+    packages=['texoid'],
     entry_points={
         'console_scripts': [
             'texoid = texoid.server:main',
