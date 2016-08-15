@@ -77,8 +77,8 @@ class MainHandler(tornado.web.RequestHandler):
                 raw.flush()
 
                 filename = latex_to_dvi(raw.name)
-                svg_data = dvi_to_svg(filename)
-                png_data = dvi_to_png(filename).encode('base64')
+                svg_data = dvi_to_svg(filename).strip()
+                png_data = dvi_to_png(filename).strip().encode('base64')
                 return {
                     'status': 'ok',
                     'data': {
