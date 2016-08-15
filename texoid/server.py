@@ -70,16 +70,15 @@ class MainHandler(tornado.web.RequestHandler):
                 svg_data = dvi_to_svg(filename).strip()
                 png_data = svg_to_png(svg_data).strip().encode('base64')
                 return {
-                    'status': 'success',
-                    'data': {
-                        'svg': svg_data,
-                        'png': png_data
-                    }}
+                    'success': True,
+                    'svg': svg_data,
+                    'png': png_data
+                }
         except Exception as error:
             print error.message
             return {
-                'status': 'error',
-                'error_message': error.message
+                'success': False,
+                'error': error.message
             }
 
     def post(self):
