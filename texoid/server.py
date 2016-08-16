@@ -80,7 +80,7 @@ class MainHandler(tornado.web.RequestHandler):
                 filename = latex_to_dvi(raw.name)
                 svg_data = dvi_to_svg(filename).strip()
                 png_data, width, height = svg_to_png(svg_data)
-                png_data.strip().encode('base64')
+                png_data = png_data.strip().encode('base64')
                 return {
                     'success': True,
                     'svg': svg_data,
