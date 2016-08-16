@@ -85,8 +85,8 @@ class MainHandler(tornado.web.RequestHandler):
                     'success': True,
                     'svg': svg_data,
                     'png': png_data,
-                    'width': width,
-                    'height': height
+                    'meta': {'width': width,
+                             'height': height}
                 }
         except Exception as error:
             print error.message
