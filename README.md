@@ -1,5 +1,5 @@
 # Texoid
-Python server for LaTeX math rendering.
+Python server for LaTeX math rendering to SVG and PNG.
 
 Texoid is super simple to set up and use.
 
