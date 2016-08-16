@@ -1,5 +1,6 @@
 # Texoid
 Python server for LaTeX math rendering to SVG and PNG.
+It is lightweight and perfect for embedding LaTeX documents into webpages, without the hassle of rendering the documents yourself.
 
 ## Installation
 Texoid is super simple to set up and use.
@@ -10,9 +11,9 @@ $ cd texoid
 $ python setup.py develop
 ```
 
-Texoid relies on LaTeX to render documents to DVI format, dvisvgm to convert to SVG, and ImageMagick to convert the SVG into a PNG. On a typical Debian or Ubuntu machine, you can install everything with:
+Texoid relies on LaTeX to render documents to DVI format, dvisvgm to convert to SVGs, and ImageMagick to convert SVGs into PNGs. On a typical Debian or Ubuntu machine, you can fetch everything you need with:
 
-```
+```shell
 $ apt-get install texlive-latex-base texlive-binaries imagemagick
 ```
 
@@ -37,6 +38,7 @@ If `success` is `true`:
 * `meta` will be a dict containing two entries:
   * `width`, the width of the rendered document in pixels
   * `height`, the height of the rendered document, again in pixels
+  * these arguments are what the SVG/PNGs generated should be sized by to display properly in webpages
 
 If `success` is `false`, the response will contain an `error` field with the LaTeX error output.
 
