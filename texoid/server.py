@@ -49,8 +49,8 @@ def dvi_to_svg(filename):
 
 def latex_to_dvi(filename):
     comp = subprocess.Popen(
-        [LATEX_PATH, '-halt-on-error', '-output-directory=%s' % os.path.dirname(filename), filename],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        [LATEX_PATH, '-halt-on-error', '-interaction=nonstopmode', '-output-directory=%s' % os.path.dirname(filename),
+         filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = comp.communicate()[0]
     if comp.returncode:
         print >> sys.stderr, out
