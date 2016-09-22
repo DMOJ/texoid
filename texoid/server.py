@@ -29,7 +29,8 @@ for path in [LATEX_PATH, DVISVGM_PATH, CONVERT_PATH]:
 
 
 def svg_to_png(svg):
-    comp = subprocess.Popen([CONVERT_PATH, '-identify', 'svg:-', 'png:-'], stdout=subprocess.PIPE,
+    # Must use /dev/stdin since some versions of ImageMagick hang with - as input
+    comp = subprocess.Popen([CONVERT_PATH, '-identify', 'svg:/dev/stdin', 'png:-'], stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     out, err = comp.communicate(svg)
     if comp.returncode:
