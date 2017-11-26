@@ -15,6 +15,7 @@ import json
 from tornado.options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
+define("address", default="localhost", help="run on the given address", type=str)
 
 redimensions = re.compile('.*?(\d+)x(\d+).*?')
 
@@ -106,7 +107,7 @@ def main():
         (r"/", MainHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
+    http_server.listen(options.port, address=options.address)
     tornado.ioloop.IOLoop.current().start()
 
 
