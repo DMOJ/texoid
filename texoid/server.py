@@ -72,6 +72,10 @@ def latex_to_dvi(filename):
 
 
 class MainHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        super(MainHandler, self).set_default_headers()
+        self.set_header('Content-Type', 'application/json')
+
     def handle_request(self):
         try:
             data = urllib.unquote(self.get_argument('q'))
