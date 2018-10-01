@@ -3,7 +3,6 @@ import logging
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import urllib
 
@@ -14,6 +13,8 @@ import tornado.web
 
 from tornado.options import define, options
 
+
+logger = logging.getLogger('texoid')
 
 define("port", default=8888, help="run on the given port", type=int)
 define("address", default="localhost", help="run on the given address", type=str)
@@ -36,7 +37,7 @@ def svg_to_png(svg):
                             stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     out, err = comp.communicate(svg)
     if comp.returncode:
-        logging.error(err)
+        logger.error(err)
         raise AssertionError('convert exited with error code')
     first_nl = out.find('\n')
     ident = out[:first_nl]
@@ -54,7 +55,7 @@ def dvi_to_svg(filename):
                             stderr=subprocess.STDOUT)
     out = comp.communicate()[0]
     if comp.returncode:
-        logging.error(out)
+        logger.error(out)
         raise AssertionError('dvisvgm exited with error code')
     if 'ERROR' in out:
         raise AssertionError(out)
@@ -67,7 +68,7 @@ def latex_to_dvi(filename):
          filename], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = comp.communicate()[0]
     if comp.returncode:
-        logging.error(out)
+        logger.error(out)
         raise AssertionError(out)
     return filename.replace('.latex', '.dvi')
 
@@ -92,7 +93,7 @@ class MainHandler(tornado.web.RequestHandler):
                              'height': height}
                 }
         except Exception as error:
-            logging.error(error.message)
+            logger.exception('failed to render input')
             return {
                 'success': False,
                 'error': error.message
