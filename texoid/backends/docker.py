@@ -11,8 +11,9 @@ size_struct = struct.Struct('!I')
 
 
 class DockerLaTeXBackend(object):
-    def __init__(self):
-        subprocess.call(['docker', 'pull', 'dmoj/texbox:latest'])
+    def __init__(self, pull=True):
+        if pull:
+            subprocess.call(['docker', 'pull', 'dmoj/texbox:latest'])
 
     @gen.coroutine
     def _write_and_close(self, stream, input):
