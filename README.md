@@ -1,4 +1,5 @@
-# Texoid
+# Texoid  [![PyPI](https://img.shields.io/pypi/v/texoid.svg)](https://pypi.org/project/texoid/) [![PyPI - Format](https://img.shields.io/pypi/format/texoid.svg)](https://pypi.org/project/texoid/) [![PyPI - License](https://img.shields.io/pypi/l/texoid.svg)](https://pypi.org/project/texoid/)
+
 Python server for LaTeX math rendering to SVG and PNG.
 It is lightweight and perfect for embedding LaTeX documents into webpages, without the hassle of rendering the documents yourself.
 
