@@ -15,6 +15,9 @@ setup(
         ]
     },
     install_requires=['tornado'],
+    extras_require={
+        'test': ['requests'],
+    },
 
     author='Quantum',
     author_email='quantum@dmoj.ca',
