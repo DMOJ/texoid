@@ -1,3 +1,4 @@
+import logging
 import struct
 import subprocess
 
@@ -6,6 +7,7 @@ from tornado.process import Subprocess
 
 from texoid.utils import utf8bytes, utf8text
 
+logger = logging.getLogger('texoid')
 header = struct.Struct('!III')
 size_struct = struct.Struct('!I')
 
@@ -13,6 +15,7 @@ size_struct = struct.Struct('!I')
 class DockerLaTeXBackend(object):
     def __init__(self, pull=True):
         if pull:
+            logger.info('Pulling latest dmoj/texbox from docker cloud. This may take a while.')
             subprocess.call(['docker', 'pull', 'dmoj/texbox:latest'])
 
     @gen.coroutine
