@@ -40,4 +40,10 @@ class DockerLaTeXBackend(object):
         except struct.error:
             raise RuntimeError('corrupted output from texbox')
 
+        if len(svg) != svg_len or b'<svg' not in svg:
+            raise RuntimeError('corrupted SVG file from texbox')
+
+        if len(png) != png_len or b'\x89PNG' not in png:
+            raise RuntimeError('corrupted PNG file from texbox')
+
         return {'svg': utf8text(svg), 'png': png, 'meta': {'width': width, 'height': height}}
