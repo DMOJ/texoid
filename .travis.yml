@@ -1,0 +1,40 @@
+sudo: required
+dist: xenial
+language: python
+python:
+- 3.4
+- 3.5
+- 3.6
+- 3.7
+services:
+- docker
+env:
+- USE_DOCKER="no"
+- USE_DOCKER="yes"
+cache:
+  directories:
+  - $HOME/.cache/pip
+before_cache:
+- rm -f $HOME/.cache/pip/log/debug.log
+before_install:
+- |
+  if [ "$USE_DOCKER" != yes ]; then
+    sudo apt-get install -y texlive-binaries texlive-generic-extra \
+      texlive-generic-recommended texlive-latex-base texlive-latex-extra \
+      texlive-latex-recommended texlive-pictures librsvg2-bin imagemagick
+  fi
+install:
+- pip install codecov
+- pip install -e .[test]
+script:
+- |
+  if [ "$USE_DOCKER" = yes ]; then
+    docker pull dmoj/texbox:latest
+    coverage run --source=texoid -m texoid --docker &
+  else
+    coverage run --source=texoid -m texoid &
+  fi
+- sleep 5
+- python test_texoid.py http://localhost:8888
+after_script:
+- codecov
