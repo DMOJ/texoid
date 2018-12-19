@@ -27,8 +27,8 @@ class DockerLaTeXBackend(object):
     def render(self, source):
         proc = Subprocess(['docker', 'run', '-i', 'dmoj/texbox:latest'], stdin=Subprocess.STREAM,
                           stdout=Subprocess.STREAM, stderr=Subprocess.STREAM)
-        input = self._write_and_close(proc.stdin, utf8bytes(source))
-        _, output, log = yield [input, proc.stdout.read_until_close(), proc.stderr.read_until_close()]
+        input_task = self._write_and_close(proc.stdin, utf8bytes(source))
+        _, output, log = yield [input_task, proc.stdout.read_until_close(), proc.stderr.read_until_close()]
 
         try:
             yield proc.wait_for_exit()

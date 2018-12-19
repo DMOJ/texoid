@@ -11,7 +11,7 @@ from tornado.process import Subprocess
 from texoid.utils import utf8bytes, utf8text
 
 logger = logging.getLogger('texoid')
-redimensions = re.compile(b'.*?(\d+)x(\d+).*?')
+redimensions = re.compile(br'.*?(\d+)x(\d+).*?')
 
 
 class DirectLaTeXBackend(object):
