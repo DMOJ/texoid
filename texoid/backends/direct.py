@@ -66,7 +66,7 @@ class DirectLaTeXWorker(object):
         try:
             yield convert.wait_for_exit()
         except subprocess.CalledProcessError:
-            raise RuntimeError('Failed to run convert, full log:\n' + utf8text(log, errors='backslashreplace'))
+            raise RuntimeError('Failed to run convert, full log:\n' + utf8text(err, errors='backslashreplace'))
 
         ident, _, out = out.partition(b'\n')
         width, height = redimensions.match(ident).groups()
