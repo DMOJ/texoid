@@ -1,14 +1,14 @@
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as f:
     long_description = f.read()
 
 setup(
     name='texoid',
-    version='0.2',
-    packages=['texoid'],
+    version='0.2.1',
+    packages=find_packages(),
     entry_points={
         'console_scripts': [
             'texoid = texoid.main:main',
