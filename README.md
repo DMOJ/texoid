@@ -33,10 +33,13 @@ This will automatically pull the latest `texbox` image and start using it.
 To start the Texoid without Docker, use:
 
 ```shell
-$ LATEX_BIN=<path to latex> DVISVGM_BIN=<path to dvisvgm> CONVERT_BIN=<path to convert> texoid --port=<port>
+$ export LATEX_BIN=<path to latex>
+$ export DVISVGM_BIN=<path to dvisvgm>
+$ export CONVERT_BIN=<path to convert>
+$ texoid --port=<port>
 ```
 
-The environment variables are not necessary if all three executables are present in `/usr/bin`. Here, `convert` refers to ImageMagick's `convert` tool.
+The environment variables are not necessary if the respective executables are present in `$PATH`. Here, `convert` refers to ImageMagick's `convert` tool.
 
 ## Using Texoid
 
@@ -71,13 +74,24 @@ $E=mc^2$
 #### A successful render
 ```shell
 $ curl -H 'Content-Type: text/plain' --data-raw '\documentclass{standalone}\begin{document}$E=mc^2$\end{document}' localhost:8888
-{"success": true, "svg": "<?xml version='1.0'?><svg....</svg>", "png": "iVBORw0KGgoA....RK5CYII=", "meta": {"width": "48", "height": "10"}}
+{
+    "success": true,
+    "svg": "<?xml version='1.0'?><svg...</svg>",
+    "png": "iVBORw0KGgoA...RK5CYII=",
+    "meta": {
+        "width": "48", 
+        "height": "10"
+    }
+}
 ```
 
 #### A malformed request
 ```shell
 $ curl -H 'Content-Type: text/plain' --data 'malformed' localhost:8888
-{"success": false, "error": "This is pdfTeX, Version 3.14159265-2.6-1.40.15...LaTeX Error: Missing \\begin{document}..."}
+{
+    "success": false,
+    "error": "This is pdfTeX, Version 3.14159265-2.6-1.40.15...LaTeX Error: Missing \\begin{document}..."
+}
 ```
 
 And that's it!
